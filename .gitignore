@@ -1,0 +1,11 @@
+/target/
+/.idea/
+/logs/
+/libraries/.idea/*.xml
+yxqn-manage.iml
+/src/main/resources/generatorConfig.xml
+.classpath
+.project
+mybatis-config.xml
+/src/main/test/com.youxiuqingnian.manage/
+/src/main/resources/application-sjs.properties
