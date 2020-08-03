@@ -19,7 +19,7 @@ import java.nio.charset.Charset;
  * @Version 1.0
  **/
 @Mojo(name = "install")
-public class MMGoHome extends AbstractMojo {
+public class AutoDepHome extends AbstractMojo {
     @Parameter( property = "module", required = true)
     private String module;
     /**
@@ -34,8 +34,6 @@ public class MMGoHome extends AbstractMojo {
     private static Integer port = 22;
     private static String workspace = "/home/dev";
 
-    public MMGoHome() {
-    }
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -95,7 +93,8 @@ public class MMGoHome extends AbstractMojo {
      */
     private static void deploy(String module) {
         RemoteShellExecutor executor = new RemoteShellExecutor(remoteHost, username, password);
-        String shell = workspace + "/rmt_deploy.sh " + module;
+        //String shell = workspace + "/rmt_deploy.sh " + module;
+        String shell = "/data/deploy/rmt_deploy.sh " + module;
         int exec = -1;
         try {
             Log.info(" exec shell : {}", new Object[]{shell});
@@ -140,8 +139,10 @@ public class MMGoHome extends AbstractMojo {
 
             String multipleModelsCommand = "cmd /C start /b mvn clean package -T 1C -pl yxqn-"+module+" -am -Dmaven.compile.fork=true -Dmaven.test.skip=true&&exit";
         String exec = "cmd /C start /b mvn clean package -T 1C -Dmaven.compile.fork=true -Dmaven.test.skip=true&&exit";
+        File file = new File(System.getProperty("user.dir"));
         if(hasParent){
             exec = multipleModelsCommand;
+            file = file.getParentFile();
         }
         Runtime runtime = Runtime.getRuntime();
         Process process = null;
@@ -149,8 +150,6 @@ public class MMGoHome extends AbstractMojo {
         Log.info("........the package is getting packaged.......exec mvn package : {}", new Object[]{exec});
         try {
            // process = runtime.exec(exec);
-            String projectPath =System.getProperty("user.dir");
-            File file = new File(projectPath).getParentFile();
             process = runtime.exec(exec,null,file);
             BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream(), Charset.forName("GBK")));
             Log.info("br is null:... "+(br == null));
